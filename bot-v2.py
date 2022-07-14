@@ -117,20 +117,24 @@ async def msg(ctx):
     response = random.choice(help)
     await ctx.send(response)
 
-api_url = "https://api.mozambiquehe.re/"
-my_headers = {'AUTHORIZATION' : '7d926f882681a8c248bdf5dac195f6e7'}
-params = {'legend'}
-playername = str
-platform = str
+api_url = "https://public-api.tracker.gg/v2/apex/standard/profile/origin/"
+my_headers = {'Content-Type' : 'application/json', 'TRN-Api-Key' : '12afa2a2-5704-4963-ac86-48397db1501d'}
+
+# get the player's name from the API and return it as a string with the command !player
+@discord_bot.command(name='player')
+async def msg(ctx, *, player):
+    player_url = api_url + player
+    player_response = requests.get(player_url, headers=my_headers)
+    player_json = player_response.json()
+    player_name = player_json['nickname']
+    await ctx.send(player_name)
 
 
 
-# message that chooses a random gametype
-@discord_bot.command(name=f'mystats')
-async def msg(ctx):
-    stats = requests.get('https://api.mozambiquehe.re/bridge?auth=7d926f882681a8c248bdf5dac195f6e7&player=OhParfait&platform=PC', params = params)
-    print(stats)
-    await ctx.send(response)
+@discord_bot.command(name='stats')
+async def msg(ctx, arg):
+    stats = requests.get(f'{api_url}{arg}', headers = my_headers)
+    await ctx.send(arg)
 
 
 
